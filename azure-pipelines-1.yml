@@ -29,6 +29,10 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    inputs:
+      testSelector: 'testAssemblies'
+      testAssemblyVer2: |
+        **\*test.dll
+      searchFolder: '$(System.DefaultWorkingDirectory)'
+      distributionBatchType: basedOnExecutionTime
+      runInParallel: true
