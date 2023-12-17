@@ -28,11 +28,19 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: VisualStudioTestPlatformInstaller@1
+  displayName: 'Install Visual Studio Test Platform'
   inputs:
-      testSelector: 'testAssemblies'
-      testAssemblyVer2: |
-        **\*test.dll
-      searchFolder: '$(System.DefaultWorkingDirectory)'
-      distributionBatchType: basedOnExecutionTime
-      runInParallel: true
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestStable'
+
+- task: VSTest@2
+  displayName: 'Run Unit Tests'
+  inputs:
+    vsTestVersion: 'toolsInstaller'    
+    # our test projects all have ".Tests" in the name
+    testAssemblyVer2: '**/bin/$(buildConfiguration)/*.Tests.dll'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    codeCoverageEnabled: true
+    runTestsInIsolation: true
