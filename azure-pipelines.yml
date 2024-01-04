@@ -36,3 +36,5 @@ steps:
     appName: 'atta-test-app123'
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
     deploymentMethod: 'auto'
+  
+- task: PublishBuildArtifacts@1
