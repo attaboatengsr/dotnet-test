@@ -21,20 +21,10 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
 
-
-- task: AzureWebApp@1
+- task: DotNetCoreCLI@2
   inputs:
-    azureSubscription: 'Azure subscription 1 (5630ec21-0a85-4f96-be47-db54feb8eb61)'
-    appType: 'webApp'
-    appName: 'atta-test-app123'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    deploymentMethod: 'auto'
-  
-- task: PublishBuildArtifacts@1
+    command: 'test'
