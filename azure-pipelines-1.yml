@@ -7,6 +7,16 @@ trigger:
 - main
 
 pool:
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1 (5630ec21-0a85-4f96-be47-db54feb8eb61)'
+    appType: 'webApp'
+    WebAppName: 'atta-test-app123'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'test'
+    SlotName: 'production'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
   vmImage: 'windows-latest'
 
 variables:
