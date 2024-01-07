@@ -1,0 +1,93 @@
+﻿@model IEnumerable<TmEvent>
+
+@{
+    ViewData["Title"] = "FindEvents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <body>
+        <div class="text-center">
+            <h1 class="display-4">Events Near Me</h1>
+            <p><em>Powered by Ticketmaster</em></p>
+        </div>
+
+        <div class="inline" style="padding: 5%;">
+            <form asp-controller="FindEvents" asp-action="SearchResults" class="form-inline">
+                <input class="form-control mr-sm-2" type="search" name="keywords" placeholder="Search for events" aria-label="Search" style="width: 90%">
+                <button class="btn btn-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+
+        <br />
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="display:none;">Id</th>
+                        <th>Event</th>
+                        <th>Description</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Tags</th>
+                        <th></th> <!--Add to My Events-->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (TmEvent tmEvent in ViewData["FindEvents"] as List<TmEvent>)
+                    {
+                        <tr>
+                            <td style="display:none;">@tmEvent.Id</td>
+                            <td>@tmEvent.Name</td>
+                            <td><a href=@tmEvent.Url>@tmEvent.Url</a></td>
+                            @if (tmEvent.Date.Start.DateTime == DateTime.MinValue)
+                            {
+                                <td>@tmEvent.Date.Start.LocalDate</td>
+                            }
+                            else
+                            {
+                                <td>@tmEvent.Date.Start.DateTime</td>
+                            }
+
+                            @if (tmEvent.Date.End == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                if (tmEvent.Date.End.DateTime == DateTime.MinValue)
+                                {
+                                    <td>@tmEvent.Date.End.LocalDate</td>
+                                }
+                                else
+                                {
+                                    <td>@tmEvent.Date.End.DateTime</td>
+                                }
+                            }
+                            <td>@tmEvent.Classifications[0].Segment.Name</td>
+                            <td>
+                                <a href="/EventsNearMe/AddToMyEvents/@tmEvent.Id/false">
+                                    <button asp-action="AddToMyEvents" id="tmEventBtnAdd" class="tmEventBtnAdd btn btn-success btn-sm pull-right" style="margin-right:5px;">
+                                        <i class="fas fa-plus"></i> Add to My Events
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (TempData["Message"] != null)
+            {
+                <script type="text/javascript">
+                    window.onload = function () {
+                        console.log('hi');
+                        notie.alert({ type: 'success', text: '@TempData["Message"]', time: 2 });
+                    };
+                </script>
+            }
+        </div>
+    </body>
+
+
+
+
+
